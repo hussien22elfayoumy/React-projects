@@ -1,6 +1,8 @@
-import logo from './logo.svg';
-import './App.css';
-
+import { useState } from 'react';
+import FriendsList from './components/FriendsList';
+import FormAddFriend from './components/FormAddFriend';
+import Button from './components/Button';
+import FormSplitBill from './components/FormSplitBill';
 const initialFriends = [
   {
     id: 118836,
@@ -23,7 +25,32 @@ const initialFriends = [
 ];
 
 function App() {
-  return <div className='App'></div>;
+  const [friends, setFriends] = useState(initialFriends);
+  const [showAddFriend, setShowAddFriend] = useState(false);
+
+  function addNewFriends(newFriend) {
+    setFriends((friends) => [...friends, newFriend]);
+    setShowAddFriend(false);
+  }
+
+  function toggleShowAddFriend() {
+    setShowAddFriend((showAddFriend) => !showAddFriend);
+  }
+
+  return (
+    <div className='app'>
+      <div className='sidebar'>
+        <FriendsList friends={friends} />
+
+        {showAddFriend && <FormAddFriend onAddNewFriends={addNewFriends} />}
+
+        <Button handelClicks={toggleShowAddFriend}>
+          {showAddFriend ? 'Close' : 'Add friend'}
+        </Button>
+      </div>
+      <FormSplitBill />
+    </div>
+  );
 }
 
 export default App;
