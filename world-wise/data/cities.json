@@ -1,15 +1,27 @@
 {
   "cities": [
     {
-      "id": "f199",
-      "cityName": "Paris",
-      "country": "France",
-      "emoji": "🇫🇷",
-      "notes": "helllllo",
-      "date": "2024-09-26T19:52:22.139Z",
+      "id": "a348",
+      "cityName": "Nenagh",
+      "country": "Ireland",
+      "emoji": "🇮🇪",
+      "notes": "",
+      "date": "2024-09-26T20:47:39.257Z",
       "position": {
-        "lat": "48.85396662652507",
-        "lng": "2.3478790847562974"
+        "lat": "52.79014910188968",
+        "lng": "-8.0652905335216"
+      }
+    },
+    {
+      "id": "0d48",
+      "cityName": "Thurles",
+      "country": "Ireland",
+      "emoji": "🇮🇪",
+      "notes": "",
+      "date": "2024-09-26T20:48:26.305Z",
+      "position": {
+        "lat": "52.830510331492476",
+        "lng": "-7.756352296257999"
       }
     }
   ]
