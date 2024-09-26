@@ -41,6 +41,39 @@ function CitiesProvider({ children }) {
     }
   }
 
+  async function createNewCity(newCity) {
+    try {
+      setIsLoading(true);
+      const res = await fetch(`${BASE_URL}/cities`, {
+        method: 'POST',
+        body: JSON.stringify(newCity),
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+      const data = await res.json();
+      setCities((cities) => [...cities, data]);
+    } catch {
+      alert('something went wrong error creating city');
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  async function deleteCity(id) {
+    try {
+      setIsLoading(true);
+      await fetch(`${BASE_URL}/cities/${id}`, {
+        method: 'DELETE',
+      });
+      setCities((cities) => cities.filter((city) => city.id !== id));
+    } catch {
+      alert('something went wrong erroe deleting the city');
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   return (
     <CitiesContext.Provider
       value={{
@@ -48,6 +81,8 @@ function CitiesProvider({ children }) {
         isLoading,
         currentCity,
         getCity,
+        createNewCity,
+        deleteCity,
       }}
     >
       {children}
