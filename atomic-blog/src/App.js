@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import { faker } from '@faker-js/faker';
 import { PostProvider, usePosts } from './PostProvider';
 import DarkModeBtn from './DarkModeBtn';
@@ -60,14 +60,14 @@ function Results() {
   return <p>🚀 {posts.length} atomic posts found</p>;
 }
 
-function Main() {
+const Main = memo(function Main() {
   return (
     <main>
       <FormAddPost />
       <Posts />
     </main>
   );
-}
+});
 
 function Posts() {
   return (
