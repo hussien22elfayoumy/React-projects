@@ -3,6 +3,7 @@ import GameBoard from './components/GameBoard';
 import Player from './components/Player';
 import Log from './components/Log';
 import { WINNING_COMBINATIONS } from './winning-combinations';
+import GameOver from './components/GameOver';
 
 const initialGameBoard = [
   [null, null, null],
@@ -52,7 +53,8 @@ function App() {
       winner = firstSquareSymbol;
     }
   }
-  console.log(winner);
+
+  let hasDraw = gameTurns.length === 9 && !winner;
 
   // TODO: handel turns whenever clicks on board
   function handleSelectedSquare(rowIndex, colIndex) {
@@ -83,6 +85,7 @@ function App() {
             isActive={activePlayer === 'O'}
           />
         </ol>
+        {(winner || hasDraw) && <GameOver winner={winner} isDraw={hasDraw} />}
 
         <GameBoard onSelectSquare={handleSelectedSquare} board={gameBoard} />
       </div>
