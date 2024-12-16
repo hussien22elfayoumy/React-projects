@@ -24,6 +24,10 @@ function driveActivePlayer(gameTurns) {
 
 function App() {
   const [gameTurns, setGameTurns] = useState([]);
+  const [players, setPlayers] = useState({
+    X: 'Player 1',
+    O: 'Player 2',
+  });
 
   let activePlayer = driveActivePlayer(gameTurns);
   let gameBoard = [...initialGameBoard.map((inner) => [...inner])];
@@ -50,7 +54,7 @@ function App() {
       firstSquareSymbol === secondSquareSymbol &&
       firstSquareSymbol === thirdSquareSymbol
     ) {
-      winner = firstSquareSymbol;
+      winner = players[firstSquareSymbol].toUpperCase();
     }
   }
 
@@ -70,8 +74,20 @@ function App() {
     });
   }
 
+  // TODO: Restart the Gmae
   function handleRematch() {
     setGameTurns([]);
+  }
+
+  //TODO: display Player Name on game over
+
+  function handleChangePlayerName(playerSymbol, playerName) {
+    setPlayers((prevName) => {
+      return {
+        ...prevName,
+        [playerSymbol]: playerName,
+      };
+    });
   }
 
   return (
@@ -79,11 +95,13 @@ function App() {
       <div id='game-container'>
         <ol id='players' className='highlight-player'>
           <Player
+            onChangePlayerName={handleChangePlayerName}
             initialName='Player 1'
             symbol='X'
             isActive={activePlayer === 'X'}
           />
           <Player
+            onChangePlayerName={handleChangePlayerName}
             initialName='Player 2'
             symbol='O'
             isActive={activePlayer === 'O'}
