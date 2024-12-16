@@ -26,7 +26,7 @@ function App() {
   const [gameTurns, setGameTurns] = useState([]);
 
   let activePlayer = driveActivePlayer(gameTurns);
-  let gameBoard = initialGameBoard;
+  let gameBoard = [...initialGameBoard.map((inner) => [...inner])];
   let winner;
 
   // TODO: display user symbol on the game board
@@ -70,6 +70,10 @@ function App() {
     });
   }
 
+  function handleRematch() {
+    setGameTurns([]);
+  }
+
   return (
     <main>
       <div id='game-container'>
@@ -85,7 +89,13 @@ function App() {
             isActive={activePlayer === 'O'}
           />
         </ol>
-        {(winner || hasDraw) && <GameOver winner={winner} isDraw={hasDraw} />}
+        {(winner || hasDraw) && (
+          <GameOver
+            onRematch={handleRematch}
+            winner={winner}
+            isDraw={hasDraw}
+          />
+        )}
 
         <GameBoard onSelectSquare={handleSelectedSquare} board={gameBoard} />
       </div>
