@@ -5,7 +5,12 @@ import Log from './components/Log';
 import { WINNING_COMBINATIONS } from './winning-combinations';
 import GameOver from './components/GameOver';
 
-const initialGameBoard = [
+const PLAYERS = {
+  X: 'Player 1 hoho',
+  O: 'Player 2 momo',
+};
+
+const INITIAL_GAME_BOARD = [
   [null, null, null],
   [null, null, null],
   [null, null, null],
@@ -22,25 +27,9 @@ function driveActivePlayer(gameTurns) {
   return currentPlayer;
 }
 
-function App() {
-  const [gameTurns, setGameTurns] = useState([]);
-  const [players, setPlayers] = useState({
-    X: 'Player 1',
-    O: 'Player 2',
-  });
-
-  let activePlayer = driveActivePlayer(gameTurns);
-  let gameBoard = [...initialGameBoard.map((inner) => [...inner])];
+// TODO: handling the winner and return winner name
+function driveWinnerName(gameBoard, players) {
   let winner;
-
-  // TODO: display user symbol on the game board
-  for (const turn of gameTurns) {
-    const { square, player } = turn;
-    const { row, col } = square;
-    gameBoard[row][col] = player;
-  }
-
-  // TODO: chek if there is wining combination
   for (const combination of WINNING_COMBINATIONS) {
     const firstSquareSymbol =
       gameBoard[combination[0].row][combination[0].column];
@@ -58,7 +47,37 @@ function App() {
     }
   }
 
-  let hasDraw = gameTurns.length === 9 && !winner;
+  return winner;
+}
+
+// TODO: janding gamin board and display symbols on it
+
+function driveGameBoard(gameTurns) {
+  let gameBoard = [...INITIAL_GAME_BOARD.map((inner) => [...inner])];
+
+  for (const turn of gameTurns) {
+    const { square, player } = turn;
+    const { row, col } = square;
+    gameBoard[row][col] = player;
+  }
+
+  return gameBoard;
+}
+
+function App() {
+  const [gameTurns, setGameTurns] = useState([]);
+  const [players, setPlayers] = useState(PLAYERS);
+
+  let activePlayer = driveActivePlayer(gameTurns);
+
+  // TODO: retriving the game board
+  const gameBoard = driveGameBoard(gameTurns);
+
+  // TODO: getting the winning player
+  const winner = driveWinnerName(gameBoard, players);
+
+  // TODO: handle Draw case
+  const hasDraw = gameTurns.length === 9 && !winner;
 
   // TODO: handel turns whenever clicks on board
   function handleSelectedSquare(rowIndex, colIndex) {
@@ -79,8 +98,7 @@ function App() {
     setGameTurns([]);
   }
 
-  //TODO: display Player Name on game over
-
+  //TODO: display Player Name on game over if win
   function handleChangePlayerName(playerSymbol, playerName) {
     setPlayers((prevName) => {
       return {
@@ -96,13 +114,13 @@ function App() {
         <ol id='players' className='highlight-player'>
           <Player
             onChangePlayerName={handleChangePlayerName}
-            initialName='Player 1'
+            initialName={PLAYERS.X}
             symbol='X'
             isActive={activePlayer === 'X'}
           />
           <Player
             onChangePlayerName={handleChangePlayerName}
-            initialName='Player 2'
+            initialName={PLAYERS.O}
             symbol='O'
             isActive={activePlayer === 'O'}
           />
