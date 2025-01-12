@@ -21,9 +21,14 @@ function CreateOrder() {
   const formErrors = useActionData();
   const isSubmitting = navigation.state === 'submitting';
 
-  const { userName, address, error, position, status } = useSelector(
-    (state) => state.user,
-  );
+  const {
+    userName,
+    address,
+    position,
+    error: adressError,
+    status: adressStatus,
+  } = useSelector((state) => state.user);
+  const isLoadinngAddress = adressStatus === 'loading';
 
   const cart = useSelector(getCart);
   const totalCartPrice = useSelector(getTotalCartPrice);
@@ -64,13 +69,34 @@ function CreateOrder() {
 
         <div className='mb-5 flex flex-col gap-2 sm:flex-row sm:items-center'>
           <label className='sm:basis-40'>Address</label>
-          <div className='grow'>
+          <div className='relative grow'>
             <input
+              defaultValue={address}
               className='input w-full'
               type='text'
               name='address'
+              disabled={isLoadinngAddress}
               required
             />
+            {adressStatus === 'error' && (
+              <p className='mt-2 rounded-md bg-red-100 p-2 text-xs text-red-700'>
+                {adressError}
+              </p>
+            )}
+            {!address && (
+              <span className='absolute right-[2.5px] top-[2.5px] md:right-[4.5px] md:top-[5px]'>
+                <Button
+                  disabled={isLoadinngAddress}
+                  type='small'
+                  onClick={(e) => {
+                    e.preventDefault();
+                    dispatch(fetchAddress());
+                  }}
+                >
+                  {isLoadinngAddress ? 'Loading...' : 'Get Position'}
+                </Button>
+              </span>
+            )}
           </div>
         </div>
 
@@ -90,7 +116,16 @@ function CreateOrder() {
 
         <div>
           <input type='hidden' name='cart' value={JSON.stringify(cart)} />
-          <Button type='primary' disabled={isSubmitting}>
+          <input
+            type='hidden'
+            name='position'
+            value={
+              position.latitude && position.longitude
+                ? `${position.latitude},${position.longitude}`
+                : ''
+            }
+          />
+          <Button type='primary' disabled={isSubmitting || isLoadinngAddress}>
             {isSubmitting
               ? 'Placing order...'
               : `Order now for ${formatCurrency(totalPrice)}`}
